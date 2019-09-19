@@ -35,3 +35,16 @@ const createUsers = async (req, res, next) => {
     return next(error);
   }
 };
+
+const updateUser = async (req, res, next) => {
+  try {
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
+    const result = await db.query(
+      "UPDATE users SET username=$1 password=$2 WHERE id=$3 RETURNING *",
+      [req.body.username, hashPassword, req.params.id]
+    );
+    return res.json(result.rows[0]);
+  } catch (error) {
+    return next(error);
+  }
+};
