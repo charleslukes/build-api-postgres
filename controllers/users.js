@@ -49,6 +49,38 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const userLogin = async (req, res, next) => {
+  try {
+    const result = await db.query(
+      "SELECT * FROM users WHERE username=$1 LIMIT 1",
+      [req.body.username]
+    );
+
+    if (result.length === 0) {
+      return res.json({ message: "Username Invalid" });
+    }
+
+    const comparePasword = await bcrypt.compare(
+      req.body.password,
+      result.password
+    );
+    if (!comparePasword) {
+      return res.json({ message: "Password Invalid" });
+    }
+
+    const token = jwt.sign(
+      { username: result.rows[0].username },
+      process.env.SECRET,
+      {
+        expiresIn: 60 * 60
+      }
+    );
+    return res.json(token);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const deleteUser = async (req, res, next) => {
   try {
     const result = await db.query("DELETE from users WHERE id=$1", [
