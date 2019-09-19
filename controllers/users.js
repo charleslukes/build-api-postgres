@@ -48,3 +48,14 @@ const updateUser = async (req, res, next) => {
     return next(error);
   }
 };
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const result = await db.query("DELETE from users WHERE id=$1", [
+      req.params.id
+    ]);
+    return res.json({ message: "Deleted" });
+  } catch (error) {
+    return next(error);
+  }
+};
