@@ -83,11 +83,18 @@ const userLogin = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const result = await db.query("DELETE from users WHERE id=$1", [
-      req.params.id
-    ]);
+    await db.query("DELETE from users WHERE id=$1", [req.params.id]);
     return res.json({ message: "Deleted" });
   } catch (error) {
     return next(error);
   }
+};
+
+module.exports = {
+  viewUsers,
+  getUser,
+  createUsers,
+  userLogin,
+  deleteUser,
+  updateUser
 };
