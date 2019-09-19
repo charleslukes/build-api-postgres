@@ -18,6 +18,7 @@ const getUser = async (req, res, next) => {
     const result = await db.query("SELECT * FROM users WHERE id=$1", [
       req.params.id
     ]);
+    console.log("Invoked", result.rows[0]);
     return res.json(result.rows[0]);
   } catch (error) {
     return next(error);
