@@ -13,11 +13,10 @@ const viewUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    const result = await db.query(
-      "SELECT * FROM users WHERE id=$1 RETURNING *",
-      [req.params.id]
-    );
-    return result;
+    const result = await db.query("SELECT * FROM users WHERE id=$1", [
+      req.params.id
+    ]);
+    return res.json(result.rows[0]);
   } catch (error) {
     return next(error);
   }
@@ -40,7 +39,7 @@ const updateUser = async (req, res, next) => {
   try {
     const hashPassword = await bcrypt.hash(req.body.password, 10);
     const result = await db.query(
-      "UPDATE users SET username=$1 password=$2 WHERE id=$3 RETURNING *",
+      "UPDATE users SET username=$1, password=$2 WHERE id=$3 RETURNING *",
       [req.body.username, hashPassword, req.params.id]
     );
     return res.json(result.rows[0]);
@@ -56,13 +55,13 @@ const userLogin = async (req, res, next) => {
       [req.body.username]
     );
 
-    if (result.length === 0) {
+    if (result.rows.length === 0) {
       return res.json({ message: "Username Invalid" });
     }
 
     const comparePasword = await bcrypt.compare(
       req.body.password,
-      result.password
+      result.rows[0].password
     );
     if (!comparePasword) {
       return res.json({ message: "Password Invalid" });
@@ -75,7 +74,7 @@ const userLogin = async (req, res, next) => {
         expiresIn: 60 * 60
       }
     );
-    return res.json(token);
+    return res.json({ token });
   } catch (error) {
     return next(error);
   }

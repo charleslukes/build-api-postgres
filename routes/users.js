@@ -14,4 +14,12 @@ router
   .get(viewUsers)
   .post(createUsers);
 
+router
+  .route("/:id")
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
+
+router.route("/login").post(userLogin);
+
 module.exports = router;

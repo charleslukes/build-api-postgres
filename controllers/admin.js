@@ -11,4 +11,4 @@ async function createAdmin(name, password) {
   return console.log(`Admin ${name} created`);
 }
 
-createAdmin("Gladys", "123abc");
+// createAdmin("Gladys", "123abc").then(() => process.exit(0));
