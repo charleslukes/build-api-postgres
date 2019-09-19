@@ -8,4 +8,9 @@ const client = new Client({
 
 client.connect();
 
+/**
+ *  CREATE TABLE users (id SERIAL PRIMARY KEY,
+ * username TEXT UNIQUE NOT NULL,
+ * password TEXT NOT NULL, isAdmin TEXT DEFAULT false);
+ */
 module.exports = client;
