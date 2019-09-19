@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const {
   viewUsers,
   createUsers,
@@ -11,14 +13,14 @@ const {
 
 router
   .route("/")
-  .get(viewUsers)
+  .get([auth, admin], viewUsers)
   .post(createUsers);
 
 router
   .route("/:id")
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+  .get(auth, getUser)
+  .patch(auth, updateUser)
+  .delete(auth, deleteUser);
 
 router.route("/login").post(userLogin);
 
