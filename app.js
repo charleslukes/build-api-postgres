@@ -3,8 +3,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const usersRoute = require("./routes/users");
+const cors = require("cors");
 require("dotenv").config();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
